@@ -1,0 +1,16 @@
+== Welcome to Jenkins workshop
+
+In this workshop you will download and start Jenkins, create a job for a ruby project
+which uses git, set up ci_reporter gem for stats and configure email notifications
+about failures in builds.
+
+Start here: http://titas.github.com/jenkins-workshop
+
+== How to run this workshop
+
+1. Fork this repository
+2. Change references from username titas to your username
+3. Push step-X tags to gh-pages to change slides
+4. Push changes to origin/workshop when this is noted in slides to trigger jobs for participants
+
+Ideas for making step 2 easier would be appreciated
