@@ -1,0 +1,1 @@
+{"body":"### Step 1: Download and start Jenkins\r\n\r\n```\r\nmkdir ~/jenkins\r\ncd ~/jenkins\r\nwget http://mirrors.jenkins-ci.org/war/latest/jenkins.war\r\njava -jar jenkins.war\r\n```","google":"","tagline":"by Titas Norkūnas","note":"Don't delete this file! It's used internally to help with page regeneration.","name":"Jenkins Workshop"}
