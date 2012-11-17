@@ -31,24 +31,26 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Step 5: Creating a job (3)</h3>
+        <h3>Step 5: Configure CI reporter</h3>
 
-<p>Add build step - Execute Shell.</p>
+<p>Lets configure ci_reporter gem in the project. This will let us see some stats about build failures. </p>
 
-<pre><code>export RAILS_ENV=test       # use test environment
-bundle install              # always do bundle install before running job
+<p>We need to change the way we run our test:</p>
 
-~/.jenkins/setup.rb         # setup your job's settings
+<p>Change your build step Execute Shell - replace <code>bundle exec rake</code> with <code>bundle exec rake ci:setup:minitest test</code></p>
 
-bundle exec rake db:drop    # cleanup if last build went bad
-bundle exec rake db:create
-bundle exec rake db:migrate
-bundle exec rake            # run the build
+<p>Add a post build step - Publish JUnit test result report.</p>
 
-bundle exec rake db:drop    # cleanup afterwards
+<pre><code>test/reports/*.xml
 </code></pre>
 
-<p>Click Save, observe your first build: <a href="http://localhost:8080/job/jenkins-workshop/1/console">http://localhost:8080/job/jenkins-workshop/1/console</a></p>
+<p>I will push these changes once everyone is ready. <a href="https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter">https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter</a></p>
+
+<p>There will be no changes after this build runs <a href="http://localhost:8080/job/jenkins-workshop/2/console">http://localhost:8080/job/jenkins-workshop/2/console</a></p>
+
+<p>Trigger one more build manually: <a href="http://localhost:8080/job/jenkins-workshop/build?delay=0sec">http://localhost:8080/job/jenkins-workshop/build?delay=0sec</a></p>
+
+<p>After this one is finished, take a look at build overview page: <a href="http://localhost:8080/job/jenkins-workshop/">http://localhost:8080/job/jenkins-workshop/</a></p>
       </section>
     </div>
 
