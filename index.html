@@ -33,21 +33,19 @@
       <section id="main_content" class="inner">
         <h3>Step 3: Creating a job (1)</h3>
 
-<p>Go to: http://localhost:8080/newJob</p>
+<p>Go to: <a href="http://localhost:8080/newJob">http://localhost:8080/newJob</a></p>
 
 <p>Build a freestyle project called "jenkins-workshop"</p>
 
-<p>Select Git as Source Code Management and enter:</p>
+<p>Select Git as Source Code Management and enter parameters.</p>
 
-<pre><code>Remote: git://github.com/titas/jenkins-workshop.git
-Branch: origin/workshop
-</code></pre>
+<p>Remote: <code>git://github.com/titas/jenkins-workshop.git</code></p>
 
-<p>Select Build Trigger:</p>
+<p>Branch: <code>origin/workshop</code></p>
 
-<pre><code>Poll SCM
-* * * * *
-</code></pre>
+<p>Select Build Trigger.</p>
+
+<p>Poll SCM (every minute): <code>* * * * *</code></p>
       </section>
     </div>
 
