@@ -31,7 +31,136 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Step 8: Finished..?</h3>
+        <h3>Step 1: Download and start Jenkins</h3>
+
+<pre><code>mkdir ~/jenkins
+cd ~/jenkins
+wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
+java -jar jenkins.war
+</code></pre>
+
+<h3>Step 2: Install Git Plugin</h3>
+
+<p>Go to: <a href="http://localhost:8080/pluginManager/available">http://localhost:8080/pluginManager/available</a></p>
+
+<p>Find and install a plugin called "Git Plugin"</p>
+
+<h3>Step 3: Creating a job (1)</h3>
+
+<p>Go to: <a href="http://localhost:8080/newJob">http://localhost:8080/newJob</a></p>
+
+<p>Build a freestyle project called "jenkins-workshop"</p>
+
+<p>Select Git as Source Code Management and enter parameters.</p>
+
+<p>Remote: <code>git://github.com/titas/jenkins-workshop.git</code></p>
+
+<p>Branch: <code>origin/workshop</code></p>
+
+<p>Select Build Trigger.</p>
+
+<p>Poll SCM (every minute): <code>* * * * *</code></p>
+
+<h3>Step 4: Creating a job (2)</h3>
+
+<p>Create <code>touch ~/.jenkins/setup.rb</code> file. This will be used to create required settings for your build.</p>
+
+<pre><code>#!/usr/bin/env ruby
+
+db_name      = ENV["JOB_NAME"].downcase
+project_path = ENV["WORKSPACE"]
+database_yml = "#{project_path}/config/database.yml"
+
+default_template = &lt;&lt;-EOF
+test:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: jenkins-workshop-test
+  pool: 5
+  username: &lt;your-username&gt;
+  password: &lt;your-password&gt;
+  socket: /tmp/mysql.sock
+EOF
+
+`touch #{database_yml}`
+File.open(database_yml, 'w') { |f| f.write(default_template) }
+</code></pre>
+
+<p>Make this file executable.</p>
+
+<pre><code>chmod +x ~/.jenkins/setup.rb
+</code></pre>
+
+<h3>Step 5: Creating a job (3)</h3>
+
+<p>Add build step - Execute Shell.</p>
+
+<pre><code>export RAILS_ENV=test       # use test environment
+bundle install              # always do bundle install before running job
+
+~/.jenkins/setup.rb         # setup your job's settings
+
+bundle exec rake db:drop    # cleanup if last build went bad
+bundle exec rake db:create
+bundle exec rake db:migrate
+bundle exec rake            # run the build
+
+bundle exec rake db:drop    # cleanup afterwards
+</code></pre>
+
+<p>Click Save, observe your first build: <a href="http://localhost:8080/job/jenkins-workshop/1/console">http://localhost:8080/job/jenkins-workshop/1/console</a></p>
+
+<h3>Step 6: Configure CI reporter</h3>
+
+<p>Lets configure ci_reporter gem in the project. This will let us see some stats about build failures. </p>
+
+<p>We need to change the way we run our test:</p>
+
+<p>Change your build step Execute Shell - replace <code>bundle exec rake</code> with <code>bundle exec rake ci:setup:minitest test</code></p>
+
+<p>Add a post build step - Publish JUnit test result report.</p>
+
+<pre><code>test/reports/*.xml
+</code></pre>
+
+<p>I will push these changes once everyone is ready. <a href="https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter">https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter</a></p>
+
+<p>There will be no changes after this build runs <a href="http://localhost:8080/job/jenkins-workshop/2/console">http://localhost:8080/job/jenkins-workshop/2/console</a></p>
+
+<p>Trigger one more build manually: <a href="http://localhost:8080/job/jenkins-workshop/build?delay=0sec">http://localhost:8080/job/jenkins-workshop/build?delay=0sec</a></p>
+
+<p>After this one is finished, take a look at build overview page: <a href="http://localhost:8080/job/jenkins-workshop/">http://localhost:8080/job/jenkins-workshop/</a></p>
+
+<h3>Step 7: Configure email notifications</h3>
+
+<p>Take a look at E-mail Notification section in here: <a href="http://localhost:8080/configure">http://localhost:8080/configure</a></p>
+
+<p>SMTP server: <code>smtp.gmail.com</code></p>
+
+<p>Default suffix: <code>@gmail.com</code></p>
+
+<p>Sender: <code>&lt;your-login@gmail.com&gt;</code></p>
+
+<p>Use authentication: <code>true</code></p>
+
+<p>User name: <code>&lt;your-login&gt;</code></p>
+
+<p>Password: <code>&lt;your-password&gt;</code></p>
+
+<p>Port: <code>465</code></p>
+
+<p>Reply-To: <code>noreply@gmail.com</code></p>
+
+<p>Charset: <code>UTF-8</code></p>
+
+<p>Click Test Configuration to check if everything is alright.</p>
+
+<p>Add a post build action to the job <a href="http://localhost:8080/job/jenkins-workshop/configure">http://localhost:8080/job/jenkins-workshop/configure</a> to send an email to <code>&lt;your@email.com&gt;</code></p>
+
+<p>Let me break the build: <a href="https://github.com/titas/jenkins-workshop/compare/ci-reporter...break-build">https://github.com/titas/jenkins-workshop/compare/ci-reporter...break-build</a></p>
+
+<h3>Step 8: Finished..?</h3>
 
 <p>Almost!</p>
 
