@@ -31,21 +31,36 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Step 3: Creating a job (1)</h3>
+        <h3>Step 4: Creating a job (2)</h3>
 
-<p>Go to: <a href="http://localhost:8080/newJob">http://localhost:8080/newJob</a></p>
+<p>Create <code>touch ~/.jenkins/setup.rb</code> file. This will be used to create required settings for your build.</p>
 
-<p>Build a freestyle project called "jenkins-workshop"</p>
+<pre><code>#!/usr/bin/env ruby
 
-<p>Select Git as Source Code Management and enter parameters.</p>
+db_name      = ENV["JOB_NAME"].downcase
+project_path = ENV["WORKSPACE"]
+database_yml = "#{project_path}/config/database.yml"
 
-<p>Remote: <code>git://github.com/titas/jenkins-workshop.git</code></p>
+default_template = &lt;&lt;-EOF
+test:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: jenkins-workshop-test
+  pool: 5
+  username: &lt;your-username&gt;
+  password: &lt;your-password&gt;
+  socket: /tmp/mysql.sock
+EOF
 
-<p>Branch: <code>origin/workshop</code></p>
+`touch #{database_yml}`
+File.open(database_yml, 'w') { |f| f.write(default_template) }
+</code></pre>
 
-<p>Select Build Trigger.</p>
+<p>Make this file executable.</p>
 
-<p>Poll SCM (every minute): <code>* * * * *</code></p>
+<pre><code>chmod +x ~/.jenkins/setup.rb
+</code></pre>
       </section>
     </div>
 
