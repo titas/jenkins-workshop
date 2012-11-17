@@ -31,26 +31,33 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Step 6: Configure CI reporter</h3>
+        <h3>Step 7: Configure email notifications</h3>
 
-<p>Lets configure ci_reporter gem in the project. This will let us see some stats about build failures. </p>
+<p>Take a look at E-mail Notification section in here: <a href="http://localhost:8080/configure">http://localhost:8080/configure</a></p>
 
-<p>We need to change the way we run our test:</p>
+<p>SMTP server: <code>smtp.gmail.com</code></p>
 
-<p>Change your build step Execute Shell - replace <code>bundle exec rake</code> with <code>bundle exec rake ci:setup:minitest test</code></p>
+<p>Default suffix: <code>@gmail.com</code></p>
 
-<p>Add a post build step - Publish JUnit test result report.</p>
+<p>Sender: <code>&lt;your-login@gmail.com&gt;</code></p>
 
-<pre><code>test/reports/*.xml
-</code></pre>
+<p>Use authentication: <code>true</code></p>
 
-<p>I will push these changes once everyone is ready. <a href="https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter">https://github.com/titas/jenkins-workshop/compare/workshop...ci-reporter</a></p>
+<p>User name: <code>&lt;your-login&gt;</code></p>
 
-<p>There will be no changes after this build runs <a href="http://localhost:8080/job/jenkins-workshop/2/console">http://localhost:8080/job/jenkins-workshop/2/console</a></p>
+<p>Password: <code>&lt;your-password&gt;</code></p>
 
-<p>Trigger one more build manually: <a href="http://localhost:8080/job/jenkins-workshop/build?delay=0sec">http://localhost:8080/job/jenkins-workshop/build?delay=0sec</a></p>
+<p>Port: <code>465</code></p>
 
-<p>After this one is finished, take a look at build overview page: <a href="http://localhost:8080/job/jenkins-workshop/">http://localhost:8080/job/jenkins-workshop/</a></p>
+<p>Reply-To: <code>noreply@gmail.com</code></p>
+
+<p>Charset: <code>UTF-8</code></p>
+
+<p>Click Test Configuration to check if everything is alright.</p>
+
+<p>Add a post build action to the job <a href="http://localhost:8080/job/jenkins-workshop/configure">http://localhost:8080/job/jenkins-workshop/configure</a> to send an email to <code>&lt;your@email.com&gt;</code></p>
+
+<p>Let me break the build: <a href="https://github.com/titas/jenkins-workshop/compare/ci-reporter...break-build">https://github.com/titas/jenkins-workshop/compare/ci-reporter...break-build</a></p>
       </section>
     </div>
 
