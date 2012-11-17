@@ -4,4 +4,6 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+require 'ci/reporter/rake/minitest' if Rails.env.test?
+
 TestMe::Application.load_tasks
