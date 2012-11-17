@@ -31,36 +31,24 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Step 4: Creating a job (2)</h3>
+        <h3>Step 5: Creating a job (3)</h3>
 
-<p>Create <code>touch ~/.jenkins/setup.rb</code> file. This will be used to create required settings for your build.</p>
+<p>Add build step - Execute Shell.</p>
 
-<pre><code>#!/usr/bin/env ruby
+<pre><code>export RAILS_ENV=test       # use test environment
+bundle install              # always do bundle install before running job
 
-db_name      = ENV["JOB_NAME"].downcase
-project_path = ENV["WORKSPACE"]
-database_yml = "#{project_path}/config/database.yml"
+~/.jenkins/setup.rb         # setup your job's settings
 
-default_template = &lt;&lt;-EOF
-test:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: jenkins-workshop-test
-  pool: 5
-  username: &lt;your-username&gt;
-  password: &lt;your-password&gt;
-  socket: /tmp/mysql.sock
-EOF
+bundle exec rake db:drop    # cleanup if last build went bad
+bundle exec rake db:create
+bundle exec rake db:migrate
+bundle exec rake            # run the build
 
-`touch #{database_yml}`
-File.open(database_yml, 'w') { |f| f.write(default_template) }
+bundle exec rake db:drop    # cleanup afterwards
 </code></pre>
 
-<p>Make this file executable.</p>
-
-<pre><code>chmod +x ~/.jenkins/setup.rb
-</code></pre>
+<p>Click Save, observe your first build: <a href="http://localhost:8080/job/jenkins-workshop/1/console">http://localhost:8080/job/jenkins-workshop/1/console</a></p>
       </section>
     </div>
 
