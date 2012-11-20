@@ -6,7 +6,7 @@ about failures in builds.
 
 Start here: http://titas.github.com/jenkins-workshop
 
-== How to run this workshop
+== How to run this workshop (as a class)
 
 1. Fork this repository
 2. Change references from username titas to your username
