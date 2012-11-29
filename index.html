@@ -96,18 +96,35 @@ File.open(database_yml, 'w') { |f| f.write(default_template) }
 
 <p>Add build step - Execute Shell.</p>
 
-<pre><code>export RAILS_ENV=test       # use test environment
-bundle install              # always do bundle install before running job
+<pre><code>export RAILS_ENV=test        # use test environment
+bundle install               # always do bundle install before running job
+</pre></code>
 
-~/.jenkins/setup.rb         # setup your job's settings
+<p>Add build step - Execute Shell.</p>
 
-bundle exec rake db:drop    # cleanup if last build went bad
-bundle exec rake db:create
-bundle exec rake db:migrate
-bundle exec rake            # run the build
-
-bundle exec rake db:drop    # cleanup afterwards
+<pre><code>export RAILS_ENV=test        # use test environment
+~/.jenkins/setup.rb          # setup your job's settings
 </code></pre>
+
+<p>Add build step - Execute Shell.</p>
+
+<pre><code>export RAILS_ENV=test                          # use test environment
+bundle exec rake db:drop db:create db:migrate  # cleanup if last build went bad
+</code></pre>
+
+<p>Add build step - Execute Shell.</p>
+
+<pre><code>export RAILS_ENV=test        # use test environment
+bundle exec rake             # run the build
+</code></pre>
+
+<p>Add build step - Execute Shell.</p>
+
+<pre><code>export RAILS_ENV=test        # use test environment
+bundle exec rake db:drop     # cleanup afterwards
+</code></pre>
+
+<p>You want to have individualized build steps because Jenkins will only read the result of the last command in the step for determining if the step failed or not.</p>
 
 <p>Click Save, observe your first build: <a href="http://localhost:8080/job/jenkins-workshop/1/console">http://localhost:8080/job/jenkins-workshop/1/console</a></p>
 
